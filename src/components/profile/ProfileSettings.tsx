@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../../contexts/AuthProvider'
 import { supabase } from '../../supabase'
-import { AvatarUpload } from '../auth/AvatarUpload'
+import { AvatarUpload } from './AvatarUpload'
 
 export const ProfileSettings = () => {
     const { user } = useAuth()
