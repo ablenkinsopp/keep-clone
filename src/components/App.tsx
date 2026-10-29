@@ -6,14 +6,10 @@ function App() {
     const { user } = useAuth();
 
     if (!user) {
-        return (
-            <Gateway />
-        )
+        return <Gateway />;
     }
 
-    return (
-        <AwsmNts />
-    );
+    return <AwsmNts />;
 }
 
 export default App;

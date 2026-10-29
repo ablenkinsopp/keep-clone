@@ -4,11 +4,14 @@ import "@fontsource-variable/sora";
 import "./index.css";
 import App from "./components/App.tsx";
 import { AuthProvider } from "./contexts/AuthProvider.tsx";
+import { NotesProvider } from "./contexts/NotesProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <AuthProvider>
-            <App />
+            <NotesProvider>
+                <App />
+            </NotesProvider>
         </AuthProvider>
     </StrictMode>,
 );

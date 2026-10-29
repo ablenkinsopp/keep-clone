@@ -1,10 +1,5 @@
 import { Input as HeadlessInput, Field, Label } from "@headlessui/react";
-import type { InputHTMLAttributes } from "react";
-
-type InputProps = {
-    label?: string;
-    error?: string;
-} & InputHTMLAttributes<HTMLInputElement>;
+import type { InputProps } from "../../types";
 
 const Input = ({ label, error, className = "", disabled, ...props }: InputProps) => {
     const baseClasses =

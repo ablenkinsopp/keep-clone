@@ -40,6 +40,7 @@ const LoginForm = ({ onToggle }: AuthFormProps) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
+                name="email"
                 required
             />
 
@@ -48,6 +49,7 @@ const LoginForm = ({ onToggle }: AuthFormProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
+                name="password"
                 required
                 minLength={6}
             />

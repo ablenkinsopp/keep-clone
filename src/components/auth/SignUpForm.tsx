@@ -45,6 +45,7 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
             <Input 
                 type="text"
                 value={username}
+                name="username"
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Username"
                 required
@@ -53,6 +54,7 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
             <Input 
                 type="email"
                 value={email}
+                name="email"
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email"
                 required
@@ -61,6 +63,7 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
             <Input 
                 type="password"
                 value={password}
+                name="password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}

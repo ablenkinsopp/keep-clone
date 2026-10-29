@@ -101,7 +101,7 @@ export const Small = ({
 }: TypographyProps) => {
     return (
         <small
-            className={`text-sm font-normal leading-none ${colourClasses[color]} ${className || ""}`}
+            className={`text-sm font-normal ${colourClasses[color]} ${className || ""}`}
         >
             {children}
         </small>
