@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Logo } from "../ui/Brand";
-import LoginForm from "./LoginForm";
-import SignUpForm from "./SignUpForm";
-import { Tiny } from "../ui/Typography";
+import { Logo } from "../components/ui/Brand";
+import LoginForm from "../components/auth/LoginForm";
+import SignUpForm from "../components/auth/SignUpForm";
+import { Tiny } from "../components/ui/Typography";
 
-const Gateway = () => {
+const GatewayPage = () => {
     const [login, setLogin] = useState(true);
 
     const toggleLogin = () => {
@@ -32,4 +32,4 @@ const Gateway = () => {
     );
 };
 
-export default Gateway;
+export default GatewayPage;

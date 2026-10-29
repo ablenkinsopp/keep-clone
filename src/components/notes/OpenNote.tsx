@@ -74,7 +74,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
                     ref={nodeRef}
                     className="bg-black/25 dark:bg-white/25 fixed top-0 h-dvh left-0 right-0 flex justify-center items-center md:px-4"
                     onClick={(e) => {
-                        console.log(e.target, e.currentTarget);
+                        // console.log(e.target, e.currentTarget);
                         if (e.target === e.currentTarget) {
                             onClose();
                         }

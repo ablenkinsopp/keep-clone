@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
 import { useLockBodyScroll } from "../hooks/useLockBodyScroll";
-import Header from "./ui/Header";
-import Button from "./ui/Button";
-import { Small } from "./ui/Typography";
-import NoteList from "./notes/NoteList";
-import OpenNote from "./notes/OpenNote";
+import Header from "../components/ui/Header";
+import Button from "../components/ui/Button";
+import { Small } from "../components/ui/Typography";
+import NoteList from "../components/notes/NoteList";
+import OpenNote from "../components/notes/OpenNote";
 import type { Note } from "../types";
 import { PlusCircleIcon } from "@phosphor-icons/react";
 import { useNotes } from "../contexts/NotesProvider";
 
-const AwsmNts = () => {
+const NotesDashboard = () => {
     const { signOut } = useAuth();
     const { notes, loading } = useNotes();
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
@@ -46,4 +46,4 @@ const AwsmNts = () => {
     );
 };
 
-export default AwsmNts;
+export default NotesDashboard;
