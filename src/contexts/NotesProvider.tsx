@@ -1,14 +1,28 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { supabase } from "../supabase";
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    useCallback,
+} from "react";
 import type { Note } from "../types";
 import { useAuth } from "./AuthProvider";
+import {
+    createNote,
+    deleteNote,
+    fetchNotes,
+    updateNote,
+} from "../services/notes";
 
 type NotesContextType = {
     notes: Note[];
     loading: boolean;
-    createNote: (title: string, body: string) => Promise<Note | null>;
-    updateNote: (note: Note) => Promise<void>;
-    deleteNote: (id: string) => Promise<void>;
+    handleCreateNote: (
+        title: string,
+        body: string,
+    ) => Promise<null | undefined>;
+    handleUpdateNote: (note: Note) => Promise<null | undefined>;
+    handleDeleteNote: (id: string) => Promise<null | undefined>;
     refresh: () => Promise<void>;
 };
 
@@ -19,7 +33,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchNotes = useCallback(async () => {
+    const handleFetchNotes = useCallback(async () => {
         if (!user) {
             setNotes([]);
             setLoading(false);
@@ -27,57 +41,67 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         }
 
         setLoading(true);
-        const { data, error } = await supabase
-            .from("notes")
-            .select("*")
-            .order("updated_at", { ascending: false });
 
-        if (!error && data) setNotes(data);
+        try {
+            const fetchedNotes = await fetchNotes();
+            setNotes(fetchedNotes);
+        } catch (error) {
+            console.log(`handleFetchNotes Error:, ${error}`);
+        }
+
         setLoading(false);
     }, [user]);
 
     useEffect(() => {
-        fetchNotes();
-    }, [fetchNotes]);
+        handleFetchNotes();
+    }, [handleFetchNotes]);
 
-    const createNote = async (title: string, body: string) => {
+    const handleCreateNote = async (title: string, body: string) => {
         if (!user) return null;
-        
-        const { data, error } = await supabase
-            .from("notes")
-            .insert([{ title, body, user_id: user.id }])
-            .select()
-            .single();
 
-        if (!error && data) {
-            setNotes((prev) => [data, ...prev]);
-        }
-        return data;
-    };
-
-    const updateNote = async (note: Note) => {
-        const { data: updatedNote, error } = await supabase
-            .from("notes")
-            .update({ title: note.title, body: note.body })
-            .eq("id", note.id)
-            .select()
-            .single()
-
-
-        if (!error) {
-            setNotes((prev) => prev.map((n) => (n.id === updatedNote.id ? updatedNote : n)));
+        try {
+            const newNote = await createNote(title, body, user.id);
+            setNotes((prev) => [newNote, ...prev]);
+        } catch (error) {
+            console.log(`handleCreateNote Error:, ${error}`);
         }
     };
 
-    const deleteNote = async (id: string) => {
-        const { error } = await supabase.from("notes").delete().eq("id", id);
-        if (!error) {
+    const handleUpdateNote = async (note: Note) => {
+        if (!user) return null;
+
+        try {
+            const updatedNote = await updateNote(note);
+            setNotes((prev) =>
+                prev.map((n) => (n.id === updatedNote.id ? updatedNote : n)),
+            );
+        } catch (error) {
+            console.log(`handleUpdateNote Error:, ${error}`);
+        }
+    };
+
+    const handleDeleteNote = async (id: string) => {
+        if (!user) return null;
+
+        try {
+            await deleteNote(id);
             setNotes((prev) => prev.filter((n) => n.id !== id));
+        } catch (error) {
+            console.log(`handleUpdateNote Error:, ${error}`);
         }
     };
 
     return (
-        <NotesContext.Provider value={{ notes, loading, createNote, updateNote, deleteNote, refresh: fetchNotes }}>
+        <NotesContext.Provider
+            value={{
+                notes,
+                loading,
+                handleCreateNote,
+                handleUpdateNote,
+                handleDeleteNote,
+                refresh: handleFetchNotes,
+            }}
+        >
             {children}
         </NotesContext.Provider>
     );

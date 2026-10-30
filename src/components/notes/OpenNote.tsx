@@ -18,10 +18,10 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
 
     const nodeRef = useRef<HTMLDivElement>(null);
 
-    const { createNote, updateNote, deleteNote } = useNotes();
+    const { handleCreateNote, handleDeleteNote, handleUpdateNote } = useNotes();
 
     const onCreateNote = () => {
-        createNote(title, body);
+        handleCreateNote(title, body);
     };
 
     const onEditNote = () => {
@@ -30,7 +30,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
             title,
             body,
         };
-        updateNote(updatedNote);
+        handleUpdateNote(updatedNote);
     };
 
     const onSaveOrCreate = async (e: React.SubmitEvent) => {
@@ -45,7 +45,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
 
     const onDeleteNote = async () => {
         if (!note?.id) return;
-        deleteNote(note.id);
+        handleDeleteNote(note.id);
         onClose();
     }
 

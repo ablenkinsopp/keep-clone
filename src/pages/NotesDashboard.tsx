@@ -9,9 +9,9 @@ import OpenNote from "../components/notes/OpenNote";
 import type { Note } from "../types";
 import { PlusCircleIcon } from "@phosphor-icons/react";
 import { useNotes } from "../contexts/NotesProvider";
+import { signOutUser } from "../services/auth";
 
 const NotesDashboard = () => {
-    const { signOut } = useAuth();
     const { notes, loading } = useNotes();
     const [selectedNote, setSelectedNote] = useState<Note | null>(null);
 
@@ -36,7 +36,7 @@ const NotesDashboard = () => {
                         )}
                     </div>
                 </div>
-                <Button onClick={signOut}>Sign out</Button>
+                <Button onClick={signOutUser}>Sign out</Button>
             </div>
             <OpenNote
                 note={selectedNote}

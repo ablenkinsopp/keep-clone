@@ -1,48 +1,42 @@
-import { useState } from 'react'
-import { supabase } from '../../supabase'
-import Input from '../ui/Input'
-import Button from '../ui/Button'
-import type { AuthFormProps } from '../../types'
-import TextLink from '../ui/TextLink'
-import { Tiny } from '../ui/Typography'
+import { useState } from "react";
+import Input from "../ui/Input";
+import Button from "../ui/Button";
+import type { AuthFormProps } from "../../types";
+import TextLink from "../ui/TextLink";
+import { Tiny } from "../ui/Typography";
+import { signUpUser } from "../../services/auth";
 
-const SignUpForm = ({ onToggle} : AuthFormProps) => {
-    const [email, setEmail] = useState('')
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [message, setMessage] = useState('')
-    const [busy, setBusy] = useState(false)
+const SignUpForm = ({ onToggle }: AuthFormProps) => {
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [busy, setBusy] = useState(false);
 
     const handleSubmit = async (e: React.SubmitEvent) => {
-        e.preventDefault()
-        setBusy(true)
-        setMessage('')
+        e.preventDefault();
+        setBusy(true);
+        setMessage("");
 
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                data: {
-                    username
-                }
-            }
-        })
+        const { data, error } = await signUpUser(email, password, username);
 
         if (error) {
-            setMessage(`Error: ${error.message}`)
+            setMessage(`Error: ${error.message}`);
         } else {
-            setMessage(`Signed up as ${data.user?.email}. Check the dashboard.`)
-            setEmail('')
-            setUsername('')
-            setPassword('')
+            setMessage(
+                `Signed up as ${data.user?.email}. Check the dashboard.`,
+            );
+            setEmail("");
+            setUsername("");
+            setPassword("");
         }
 
-        setBusy(false)
-    }
+        setBusy(false);
+    };
 
     return (
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-8">
-            <Input 
+            <Input
                 type="text"
                 value={username}
                 name="username"
@@ -51,7 +45,7 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
                 required
             />
 
-            <Input 
+            <Input
                 type="email"
                 value={email}
                 name="email"
@@ -60,7 +54,7 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
                 required
             />
 
-            <Input 
+            <Input
                 type="password"
                 value={password}
                 name="password"
@@ -72,24 +66,19 @@ const SignUpForm = ({ onToggle} : AuthFormProps) => {
 
             {message && <p className="text-sm">{message}</p>}
 
-            <div className='w-full flex justify-between'>
+            <div className="w-full flex justify-between">
                 <div className="flex flex-col gap-1 items-start">
                     <Tiny color="muted">Have an account?</Tiny>
                     <TextLink onClick={onToggle} type="button">
                         Login
                     </TextLink>
                 </div>
-                <Button
-                    type="submit"
-                    disabled={busy}
-                >
-                    {busy ? 'Signing up...' : 'Sign up'}
+                <Button type="submit" disabled={busy}>
+                    {busy ? "Signing up..." : "Sign up"}
                 </Button>
             </div>
-
-            
         </form>
-    )
-}
+    );
+};
 
 export default SignUpForm;
