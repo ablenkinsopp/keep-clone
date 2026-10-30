@@ -5,7 +5,7 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { CSSTransition } from "react-transition-group";
 import Textarea from "../ui/Textarea";
-import { useNotes } from "../../contexts/NotesProvider";
+import { useNotes } from "../../hooks/useNotes";
 
 type OpenNoteProps = {
     note: Note | null;

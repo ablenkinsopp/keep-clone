@@ -8,8 +8,8 @@ import NoteList from "../components/notes/NoteList";
 import OpenNote from "../components/notes/OpenNote";
 import type { Note } from "../types";
 import { PlusCircleIcon } from "@phosphor-icons/react";
-import { useNotes } from "../contexts/NotesProvider";
 import { signOutUser } from "../services/auth";
+import { useNotes } from "../hooks/useNotes";
 
 const NotesDashboard = () => {
     const { notes, loading } = useNotes();

@@ -1,6 +1,7 @@
 import type { Note } from "../../types";
-import { Lead, Small } from "../ui/Typography";
+import { Lead, Small, Tiny } from "../ui/Typography";
 import { truncate } from "../../utils";
+import moment from "moment";
 
 type NoteListProps = {
     notes: Note[];
@@ -16,7 +17,10 @@ const NoteList = ({ notes, onSelect }: NoteListProps) => {
                     onClick={() => onSelect(note)}
                     className="cursor-pointer flex flex-col gap-2 p-4 rounded shadow-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 hover:dark:bg-slate-800 border border-slate-200 dark:border-slate-800 hover:shadow-md transition-all ease-in"
                 >
-                    <Lead>{note.title}</Lead>
+                    <div className="flex gap-4 justify-between items-center">
+                        <Lead>{note.title}</Lead>
+                        <Tiny color="muted">{moment(note.updated_at).fromNow()}</Tiny>
+                    </div>
                     <Small>{truncate(note.body, 200)}</Small>
                 </div>
             ))}
