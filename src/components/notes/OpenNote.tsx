@@ -4,8 +4,8 @@ import type { Note } from "../../types";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { CSSTransition } from "react-transition-group";
-import Textarea from "../ui/Textarea";
 import { useNotes } from "../../hooks/useNotes";
+import ContentEditable from "./ContentEditable";
 
 type OpenNoteProps = {
     note: Note | null;
@@ -20,6 +20,8 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
 
     const { handleCreateNote, handleDeleteNote, handleUpdateNote } = useNotes();
 
+    const isExistingNote = note?.id !== "new-note" && note?.id !== "new-list";
+
     const onCreateNote = () => {
         handleCreateNote(title, body);
     };
@@ -33,13 +35,21 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
         handleUpdateNote(updatedNote);
     };
 
-    const onSaveOrCreate = async (e: React.SubmitEvent) => {
+    const onSaveOrCreate = async (
+        e: React.SubmitEvent | React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
         e.preventDefault();
-        if (note?.id) {
-            onEditNote();
-        } else {
-            onCreateNote();
+        const hasChanged =
+            title !== (note?.title ?? "") || body !== (note?.body ?? "");
+
+        if (hasChanged) {
+            if (isExistingNote) {
+                onEditNote();
+            } else {
+                onCreateNote();
+            }
         }
+
         onClose();
     };
 
@@ -47,7 +57,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
         if (!note?.id) return;
         handleDeleteNote(note.id);
         onClose();
-    }
+    };
 
     useEffect(() => {
         setTitle(note ? note.title : "");
@@ -76,7 +86,14 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
                     onClick={(e) => {
                         // console.log(e.target, e.currentTarget);
                         if (e.target === e.currentTarget) {
-                            onClose();
+                            if (
+                                note?.id !== "new-note" &&
+                                note?.id !== "new-list"
+                            ) {
+                                onSaveOrCreate(e);
+                            } else {
+                                onClose();
+                            }
                         }
                     }}
                 >
@@ -91,22 +108,12 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
                             placeholder="Title"
                         />
 
-                        <Textarea
+                        <ContentEditable
                             value={body}
-                            name="body"
-                            onChange={(e) => setBody(e.target.value)}
-                            placeholder="Note"
+                            onChange={(val) => setBody(val)}
                         />
 
-                        <div className="flex justify-between">
-                            <Button
-                                onClick={onDeleteNote}
-                                iconLeft={<TrashIcon weight="bold" />}
-                                variant="ghost"
-                                type="button"
-                            >
-                                Delete
-                            </Button>
+                        <div className="flex flex-row-reverse justify-between">
                             <Button
                                 disabled={body === ""}
                                 type="submit"
@@ -114,6 +121,16 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
                             >
                                 Save & Close
                             </Button>
+                            {isExistingNote && (
+                                <Button
+                                    onClick={onDeleteNote}
+                                    iconLeft={<TrashIcon weight="bold" />}
+                                    variant="ghost"
+                                    type="button"
+                                >
+                                    Delete
+                                </Button>
+                            )}
                         </div>
                     </form>
                 </div>
