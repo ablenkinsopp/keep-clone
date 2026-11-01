@@ -44,8 +44,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
     ) => {
         e.preventDefault();
         const hasChanged =
-            title !== (note?.title ?? "") || body !== (note?.body ?? "");
-
+            title !== (note?.title ?? "") || body !== (note?.body ?? "") || list !== note?.list;
         if (hasChanged) {
             if (isExistingNote) {
                 onEditNote();

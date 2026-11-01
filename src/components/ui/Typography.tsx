@@ -123,6 +123,21 @@ export const Tiny = ({
     );
 };
 
+// Small Text Component with Color Variants
+export const ExtraTiny = ({
+    children,
+    className,
+    color = "neutral",
+}: TypographyProps) => {
+    return (
+        <small
+            className={`text-[10px] font-normal leading-none ${colourClasses[color]} ${className || ""}`}
+        >
+            {children}
+        </small>
+    );
+};
+
 // Lead Text Component with Color Variants
 export const Lead = ({
     children,
