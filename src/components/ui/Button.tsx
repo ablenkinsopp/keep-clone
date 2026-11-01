@@ -8,7 +8,7 @@ import type { Size } from "../../types";
 type ButtonVariant = "filled" | "ghost";
 
 type BaseProps = {
-    children: ReactNode;
+    children?: ReactNode;
     iconLeft?: ReactNode;
     iconRight?: ReactNode;
     size?: Size;
@@ -36,18 +36,18 @@ const Button = ({
     // Now TypeScript knows this is the Button variant, so 'disabled' exists
     const { disabled } = rest as ButtonHTMLAttributes<HTMLButtonElement>;
 
-    const sharedClasses = `${!children && ((!iconLeft && iconRight) || (iconLeft && !iconRight)) ? "w-9" : "px-4"} flex gap-1 py-2 rounded flex items-center justify-center font-semibold`;
+    const sharedClasses = `flex gap-1 rounded flex items-center justify-center font-semibold`;
     
     const variantClasses: Record<ButtonVariant, string> = {
         filled: `text-slate-50 dark:text-slate-950 ${disabled ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 hover:dark:bg-slate-300"}`,
         ghost: "text-slate-900 hover:text-slate-800 hover:bg-black/10 dark:text-slate-50 dark:hover:text-slate-200 dark:hover:bg-white/10"
     }
     const sizeClasses: Record<Size, string> = {
-        xs: "",
-        sm: "text-sm",
-        md: "text-base",
-        lg: "",
-        xl: "",
+        xs: `text-xs ${!children && ((!iconLeft && iconRight) || (iconLeft && !iconRight)) ? "w-8" : "px-2"} py-2`,
+        sm: `text-sm ${!children && ((!iconLeft && iconRight) || (iconLeft && !iconRight)) ? "w-9" : "px-4"} py-2`,
+        md: `text-base ${!children && ((!iconLeft && iconRight) || (iconLeft && !iconRight)) ? "w-9" : "px-4"} py-2`,
+        lg: ``,
+        xl: ``,
     };
 
     const disabledClasses = disabled

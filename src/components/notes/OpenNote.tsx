@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { CheckCircleIcon, TrashIcon } from "@phosphor-icons/react";
-import type { Note } from "../../types";
+import { type ListItem, type Note } from "../../types";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { CSSTransition } from "react-transition-group";
 import { useNotes } from "../../hooks/useNotes";
 import ContentEditable from "./ContentEditable";
+import ListEditor from "./ListEditor";
 
 type OpenNoteProps = {
     note: Note | null;
@@ -15,6 +16,8 @@ type OpenNoteProps = {
 const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
     const [title, setTitle] = useState<string>("");
     const [body, setBody] = useState<string>("");
+    const [list, setList] = useState<ListItem[]>([]);
+    const [type, setType] = useState<string>("note");
 
     const nodeRef = useRef<HTMLDivElement>(null);
 
@@ -23,7 +26,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
     const isExistingNote = note?.id !== "new-note" && note?.id !== "new-list";
 
     const onCreateNote = () => {
-        handleCreateNote(title, body);
+        handleCreateNote(title, body, list);
     };
 
     const onEditNote = () => {
@@ -31,6 +34,7 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
             ...note,
             title,
             body,
+            list,
         };
         handleUpdateNote(updatedNote);
     };
@@ -61,7 +65,9 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
 
     useEffect(() => {
         setTitle(note ? note.title : "");
-        setBody(note ? note.body : "");
+        setBody(note?.body ?? "");
+        setList(note?.list ?? []);
+        setType(note?.id === "new-list" || (note?.list && note.list.length > 0) ? "list" : "note");
     }, [note]);
 
     return (
@@ -108,14 +114,18 @@ const OpenNote = ({ note = null, onClose }: OpenNoteProps) => {
                             placeholder="Title"
                         />
 
-                        <ContentEditable
-                            value={body}
-                            onChange={(val) => setBody(val)}
-                        />
+                        { type === "list" ? 
+                            <ListEditor items={list} onChange={(list) => setList(list) } />
+                            :
+                            <ContentEditable
+                                value={body}
+                                onChange={(val) => setBody(val)}
+                            />
+                        }
 
                         <div className="flex flex-row-reverse justify-between">
                             <Button
-                                disabled={body === ""}
+                                disabled={body === "" && title === "" && list.length === 0}
                                 type="submit"
                                 iconLeft={<CheckCircleIcon weight="bold" />}
                             >

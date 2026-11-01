@@ -6,7 +6,7 @@ import {
     fetchNotes,
     updateNote,
 } from "../services/notes";
-import type { Note } from "../types";
+import type { ListItem, Note } from "../types";
 
 export const useNotes = () => {
     const { user } = useAuth();
@@ -25,8 +25,8 @@ export const useNotes = () => {
     });
 
     const createMutation = useMutation({
-        mutationFn: ({ title, body }: { title: string; body: string }) =>
-            createNote(title, body, user!.id),
+        mutationFn: ({ title, body, list }: { title: string; body: string, list: ListItem[] }) =>
+            createNote(title, body, list, user!.id),
         onSuccess: (newNote) => {
             queryClient.setQueryData(queryKey, (old: Note[] = []) => [
                 newNote,
@@ -57,8 +57,8 @@ export const useNotes = () => {
         notes,
         loading: isLoading,
         // Using mutateAsync allows your UI components to still await these if needed
-        handleCreateNote: async (title: string, body: string) =>
-            createMutation.mutateAsync({ title, body }),
+        handleCreateNote: async (title: string, body: string, list: ListItem[]) =>
+            createMutation.mutateAsync({ title, body, list }),
         handleUpdateNote: async (note: Note) =>
             updateMutation.mutateAsync(note),
         handleDeleteNote: async (id: string) => deleteMutation.mutateAsync(id),

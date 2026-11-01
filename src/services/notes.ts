@@ -1,5 +1,5 @@
 import { supabase } from '../supabase';
-import type { Note } from '../types';
+import type { ListItem, Note } from '../types';
 
 export const fetchNotes = async (): Promise<Note[]> => {
     const { data, error } = await supabase
@@ -14,10 +14,10 @@ export const fetchNotes = async (): Promise<Note[]> => {
     return data || [];
 };
 
-export const createNote = async (title: string, body: string, userId: string): Promise<Note> => {
+export const createNote = async (title: string, body: string, list:ListItem[], userId: string): Promise<Note> => {
     const { data, error } = await supabase
         .from('notes')
-        .insert([{ title, body, user_id: userId }])
+        .insert([{ title, body, list, user_id: userId }])
         .select()
         .single();
 
@@ -31,7 +31,7 @@ export const createNote = async (title: string, body: string, userId: string): P
 export const updateNote = async (note: Note): Promise<Note> => {
     const { data, error } = await supabase
         .from('notes')
-        .update({ title: note.title, body: note.body })
+        .update({ title: note.title, body: note.body, list: note.list })
         .eq('id', note.id)
         .select()
         .single();

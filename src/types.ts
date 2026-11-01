@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes, TextareaHTMLAttributes} from "react";
+import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 export type Colour =
     | "neutral"
@@ -16,26 +16,27 @@ export type AuthFormProps = {
     onToggle: () => void;
 };
 
+export type ListItem = {
+    id: string;
+    text: string;
+    completed: boolean;
+};
+
 export type Note = {
     id?: string;
     title: string;
-    body: string;
+    body?: string;
+    list?: ListItem[];
     created_at?: Date | string;
     updated_at?: Date | string;
 };
 
 export type InputProps = {
-  label?: string;
-  error?: string;
+    label?: string;
+    error?: string;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 export type TextareaProps = {
-  label?: string;
-  error?: string;
-} & TextareaHTMLAttributes<HTMLTextAreaElement>;
-
-export type CheckboxProps = {
-    label: string;
+    label?: string;
     error?: string;
-    onDelete: () => void;
-} & InputHTMLAttributes<HTMLInputElement>;
+} & TextareaHTMLAttributes<HTMLTextAreaElement>;

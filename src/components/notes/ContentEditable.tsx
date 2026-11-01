@@ -56,7 +56,7 @@ const ContentEditable = ({
             onBlur={handleBlur}
             onClick={handleClick}
             data-placeholder={placeholder}
-            className={`w-full px-4 py-2 text-sm text-slate-900 dark:text-slate-100 bg-transparent border-b border-slate-200 dark:border-slate-800 focus:outline-none focus:bg-black/10 dark:focus:bg-white/10 focus:border-b-sky-500 whitespace-pre-wrap transition-colors empty:before:content-[attr(data-placeholder)] empty:before:text-slate-500 empty:before:pointer-events-none ${className}`}
+            className={`w-full px-4 py-2 text-sm text-slate-900 dark:text-slate-100 bg-transparent border-b border-slate-200 dark:border-slate-800 focus:outline-none hover:bg-black/10 focus:bg-black/5 dark:hover:bg-white/15 dark:focus:bg-white/10 focus:border-b-sky-500 whitespace-pre-wrap transition-colors empty:before:content-[attr(data-placeholder)] empty:before:text-slate-500 empty:before:pointer-events-none ${className}`}
         />
     );
 };

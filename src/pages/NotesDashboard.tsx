@@ -40,7 +40,7 @@ const NotesDashboard = () => {
                                     setSelectedNote({
                                         id: "new-list",
                                         title: "",
-                                        body: "",
+                                        list: [],
                                     })
                                 }
                                 iconRight={<ListChecksIcon weight="bold" />}
